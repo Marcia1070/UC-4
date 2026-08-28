@@ -1,226 +1,75 @@
-//.Importando moradores especializados
+import { Weapon } from "./Weapon";
+import { Spell } from "./Spell";
+import { Party } from "./Party";
+import { Warrior } from "./Warrior"
+import { Mage } from "./Mage";
 
-import { Doctor } from "./Doctor";
-import { Engineer } from "./Engineer";
-import { Soldier } from "./Soldier";
-import { Scientist } from "./Scientist";
-import { Reactor } from "./Reactor";
-import { Purifier } from "./Purifier";
-import { Plantation } from "./Plantation";
-import { Infirmary } from "./Infirmary";
-import { Workshop } from "./Workshop";
-import { Vault } from "./Vault";
-import { Room } from "./Room";
-import { Residents } from "./Residents";
-import { Dormitory } from "./Dormitory ";
+//Armas:
+// 1. CADASTRAR AS ARMAS DOS PERSONAGENS (Mínimo 2)
+const weapon1: Weapon = new Weapon("Adaga/Dagger", 26)
+const weapon2: Weapon = new Weapon("Espada/Sword", 25)
 
+// 2. CADASTRAR AS MAGIAS DOS MAGOS(Mínimo 2)
+// Dano: / Custo: 
+const spell1: Spell = new Spell("Estilo Sombrio/Dark Style", 50, 25)
+const spell2: Spell = new Spell("Estilo Mistico/Mystical Style", 60, 18)
 
-const ask = require(`readline-sync`)
+// 3. CADASTRAR OS PERSONAGENS (2 Warriors e 2 Mages)
+const warrior1: Warrior = new Warrior("Aragorn", 10, 150, 18, weapon1)
+const warrior2: Warrior = new Warrior("Gimli", 9, 165, 22, weapon2)
 
+const mage1: Mage = new Mage("Gandalf", 12, 100, 150, spell1)
+const mage2: Mage = new Mage("Merlin", 11, 90, 80, spell2)
 
-// . BOOT DO SISTEMA: Simulando a inicialização oficial do Vault_OS
+// 4. CRIAR UMA PARTY
+const party: Party = new Party(" THE DRAGON SLAYERS ");
 
-console.log(`> boot supervisor.exe`)
-console.log(`
+// 5. ADICIONAR OS PERSONAGENS À PARTY
 
-[OK] Loading residents...
-[OK] Loading rooms... 
-[OK] Ready-to-use management system 
+party.addMember(warrior1)
+party.addMember(warrior2)
+party.addMember(mage1)
+party.addMember(mage2)
 
-`)
-ask.question(`> Awaiting supervisor/aguardando supervisor_: Press Enter`)
+// 6. EXIBIR OS MEMBROS DA PARTY
 
+party.showMembers();
 
-const myVault: Vault = new Vault()
+// 7. EXIBIR AS INFORMAÇÕES DETALHADAS DOS PERSONAGENS
+warrior1.showInfo();
+warrior2.showInfo();
+mage1.showInfo();
+mage2.showInfo();
 
-//Cadastrando as Salas 
+// 8. FAZER OS WARRIORS ATACAREM
+warrior1.attack();
+warrior2.attack();
 
-const reactor: Room = new Room("Reactor", 2,);
-const purifier: Room = new Room("Purifier", 3);
-const plantation: Room = new Room("Plantation", 5);
-const infirmary: Room = new Room("Infirmary", 3);
-const workshop: Room = new Room("Workshop", 4);
-const dormitory: Room = new Room("Dormitory", 6);
+// 9 e 10. FAZER OS MAGES LANÇAREM MAGIAS E DEMONSTRAR O CONSUMO DE MANA
 
+mage1.castSpell();
+mage2.castSpell();
 
-// Cadastrando os Moradores (Objetos a partir das classes especializadas)
-const residents1: Residents = new Engineer("Preston Garvey", 23, "Electrical Maintenance /Manutenção Elétrica");
-const residents2: Residents = new Doctor("Moira Brown", 35, "General Medicine /Medicina Geral");
-const residents3: Residents = new Soldier("Paulo Danse", 19, "Perimeter Defense /Defesa de Perímetro");
-const residents4: Residents = new Scientist("Madison Li", 28, "Nuclear physics /Física Nuclear");
-
-// Cadastrando as salas no seu sistema central Vault
-
-myVault.registerRoom(reactor)
-myVault.registerRoom(purifier)
-myVault.registerRoom(plantation)
-myVault.registerRoom(infirmary)
-myVault.registerRoom(workshop)
-myVault.registerRoom(dormitory)
+console.log(`${mage1.getMana()}`)
+console.log(`${mage2.getMana()}`)
 
 
-// Cadastrando os moradores no seu sistema central Vault
+// 11. CAUSAR DANO A PELO MENOS UM PERSONAGEM
+console.log(`Vida inicial do Aragorn: ${warrior1.getHealth()}`);
+warrior1.takeDamage(45);
+console.log(`Vida do Aragorn após receber 45 de dano: ${warrior1.getHealth()}`);
 
-myVault.registerResident(residents1)
-myVault.registerResident(residents2)
-myVault.registerResident(residents3)
-myVault.registerResident(residents4)
+// 12. ALTERAR ALGUM ATRIBUTO UTILIZANDO UM SETTER
+// Usando o método setter de level
 
-// LOOP DO MENU INTERATIVO (VAULT-OS)
+console.log(`Level antigo do Gimli: ${warrior2.getLevel()}`);
+warrior2.setLevel(10);
+console.log(`Novo Level do Gimli (via Setter): ${warrior2.getLevel()}`);
 
+// 13. REMOVER UM PERSONAGEM DA PARTY
 
-let user = true;
+party.removeMember(mage2);
 
-while (user) {
-    console.clear();
-    console.log(`
-==============================
-       VAULT 101
-==============================
-[1] Register resident
-[2] List residents
-[3] Register room
-[4] List rooms
-[5] Assign resident
-[6] Remove resident from room
-[7] View residents of a room
-[0] Exit
+// 14. EXIBIR NOVAMENTE A PARTY APÓS A REMOÇÃO
 
-`)
-
-    let choice = ask.question("Escolha: ");
-
-//1.Registo de Morador
-    switch (choice) {
-        case "1": {
-            const name = ask.question("Name: ");
-            const age = ask.question("Age: ");
-
-            console.log(`\n
-[1] Engineer  
-[2] Doctor  
-[3] Soldier
-[4] Scientist
-`);
-            const type = ask.question("Type:  ");
-            myVault.registerRoom(infirmary)
-            console.log(`\n
-[1]Reactor 
-[2]Purifier 
-[3]Plantation 
-[4]Infirmary  
-[5]WorkShop 
-[6]Dormitory
-`)
-            const Specialization = ask.question("Specialization:");
-
-            // Criamos um mapa ligando o número digitado à classe correspondente
-
-            const clases: any = { "1": Engineer, "2": Doctor, "3": Soldier, "4": Scientist };
-            const SelectedClass = clases[type];
-
-            // Se o número existir no mapa, criamos o morador em uma única linha!
-
-            if (SelectedClass) {
-                myVault.registerResident(new SelectedClass(name, age, Specialization));
-            } else {
-                console.log(" Invalid type.");
-            }
-            break;
-        }
-
-//2.Lista de Morador
-
-        case "2": {
-            myVault.listResidents();
-            break;
-        }
-//3.Registrar Sala
-        case "3": {
-            const roomName = ask.question(`
-            [1]Reactor 
-            [2]Purifier 
-            [3]Plantation 
-            [4]Infirmary  
-            [5]WorkShop 
-            [6]Dormitory
-
-            Room Name:
-            `);
-
-            const capacity = ask.question("Max Capacity: ");
-            myVault.registerRoom(new Room(roomName, capacity));
-            break;
-        }
-//4.Lista das Salas
-        case "4": {
-            myVault.listRooms();
-            break;
-        }
-
-//5.Atribuir Morador
-        case "5": {
-
-            const residentsName = ask.question("Resident Name: ");
-            const roomName = ask.question("Room Name: ");
-
-            let isAlreadyAllocated = false; //Já está alocado
-
-            myVault.getRoom().forEach(room => {
-                room.getResidents().forEach(resident => {
-                    if (resident.getName().toLowerCase() === residentsName.toLowerCase()) {
-                        isAlreadyAllocated = true;
-                    }
-                });
-            }
-            );
-
-            if (isAlreadyAllocated) {
-                console.log(`${residentsName} is already assigned to another room! /já está atribuído a outra sala!`);
-            } else {
-                myVault.allocateResidents(residentsName, roomName);
-            }
-            break;
-
-        }
-
-//Remover o residente da Sala
-        case "6": {
-
-            const residentesName = ask.question("Resident Name: ");
-            const roomName = ask.question("Room Name: ");
-            myVault.removeResidentFromRoom(residentesName, roomName);
-            break;
-        }
-
-//Visualizar os Moradores de uma Sala
-        case "7": {
-            const roomName = ask.question("Room Name: ");
-            const roomFound = myVault.getRoom().find(room => room.getName().toLowerCase() === roomName.toLowerCase());
-
-            if (roomFound) {
-                roomFound.startShift(); // Dispara o comportamento polimórfico original (Work())
-            } else {
-                console.log("Room not found.");
-            }
-            break;
-        }
-//Saida
-        case "0": {
-            user = false; // Desliga o loop while e fecha o programa
-            break;
-        }
-        
-//Se nenhuma for Válida cai no default
-        default: {
-            console.log("Invalid choice.");
-            break;
-        }
-    }
-
-    // Importante: Pausa o console para você conseguir ler o que aconteceu antes do console.clear() limpar a tela
-
-    if (user) {
-        ask.question("Press Enter...");
-    }
-}
+party.showMembers()
